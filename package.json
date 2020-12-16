@@ -25,7 +25,6 @@
   },
   "homepage": "https://github.com/inrupt/solid-client-bootstrap#readme",
   "devDependencies": {
-    "@skypack/package-check": "^0.2.2",
     "@types/jest": "^26.0.19",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
