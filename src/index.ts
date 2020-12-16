@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright 2020 Inrupt Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -56,6 +56,8 @@ const server = app.listen(PORT, async () => {
     handleRedirect: (url) => {
       console.log(`\nPlease visit ${url} in a web browser.\n`);
     },
+  }).catch((e) => {
+    throw new Error(`Login failed: ${e.toString()}`);
   });
 });
 
