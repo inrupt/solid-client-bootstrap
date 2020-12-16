@@ -51,7 +51,7 @@ jobs:
     - name: Prepare for publication to npm
       uses: actions/setup-node@v2.1.2
       with:
-        node-version: '12.x'
+        node-version: '14.x'
         registry-url: 'https://registry.npmjs.org'
     - run: npm ci
     - name: Publish to npm
@@ -70,7 +70,7 @@ jobs:
         deployment: ${{ needs.prepare-deployment.outputs.deployment-id }}
         environment: review
         environment_url: 'https://www.npmjs.com/package/@inrupt/solid-client/v/${GITHUB_REF#refs/tags/v}'
-        description: "Published to npm. To install, run: npm install @inrupt/solid-client@${GITHUB_REF#refs/tags/v}"
+        description: "Published to npm. To install, run: npx @inrupt/solid-client-bootstrap@${GITHUB_REF#refs/tags/v}"
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         mediaType: '{"previews": ["flash", "ant-man"]}'
         state: success

@@ -24,16 +24,6 @@ Please fill in as much of the template below as you're able. Feel free to delete
 3. 
 4. 
 
-**Minimal reproduction**
-
-<!--
-Adding a minimal reproduction of the bug makes it as easy as possible to get it fixed.
-To do so, fork the following CodeSandbox, insert the minimal code that demonstrates the problem,
-and share the resulting link here:
-https://codesandbox.io/s/github/inrupt/solid-client-js/tree/master/.codesandbox/sandbox
-
--->
-
 ### Expected result
 <!-- A clear and concise description of what you expected to happen -->
 
