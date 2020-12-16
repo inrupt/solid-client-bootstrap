@@ -89,7 +89,7 @@ jobs:
         if [ -n $NODE_AUTH_TOKEN ]; then npm publish --access public --tag "$TAG_SLUG"; fi
         if [ -n $NODE_AUTH_TOKEN ]; then echo "Package published. To install, run:"; fi
         if [ -n $NODE_AUTH_TOKEN ]; then echo ""; fi
-        if [ -n $NODE_AUTH_TOKEN ]; then echo "    npx @inrupt/solid-client-bootstrap@$TAG_SLUG"; fi
+        if [ -n $NODE_AUTH_TOKEN ]; then echo "    npx @inrupt/generate-oidc-token@$TAG_SLUG"; fi
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         TAG_SLUG: ${{ needs.prepare-deployment.outputs.tag-slug }}
@@ -100,8 +100,8 @@ jobs:
         repository: ${{ github.repository }}
         deployment: ${{ needs.prepare-deployment.outputs.deployment-id }}
         environment: review
-        environment_url: 'https://www.npmjs.com/package/@inrupt/solid-client/v/${{ needs.prepare-deployment.outputs.tag-slug }}'
-        description: "Published to npm. To install, run: npm install @inrupt/solid-client@${{ needs.prepare-deployment.outputs.tag-slug }}"
+        environment_url: 'https://www.npmjs.com/package/@inrupt/generate-oidc-token/v/${{ needs.prepare-deployment.outputs.tag-slug }}'
+        description: "Published to npm. To install, run: npm install @inrupt/generate-oidc-token@${{ needs.prepare-deployment.outputs.tag-slug }}"
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         mediaType: '{"previews": ["flash", "ant-man"]}'
         state: success

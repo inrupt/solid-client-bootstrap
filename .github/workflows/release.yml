@@ -57,9 +57,9 @@ jobs:
     - name: Publish to npm
       run: |
         npm publish --access public
-        echo "Package published. To install, run:"
+        echo "Package published. To use, run:"
         echo ""
-        echo "    npm install @inrupt/solid-client"
+        echo "    npx install @inrupt/generate-oidc-token"
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Mark GitHub Deployment as successful
@@ -69,8 +69,8 @@ jobs:
         repository: ${{ github.repository }}
         deployment: ${{ needs.prepare-deployment.outputs.deployment-id }}
         environment: review
-        environment_url: 'https://www.npmjs.com/package/@inrupt/solid-client/v/${GITHUB_REF#refs/tags/v}'
-        description: "Published to npm. To install, run: npx @inrupt/solid-client-bootstrap@${GITHUB_REF#refs/tags/v}"
+        environment_url: 'https://www.npmjs.com/package/@inrupt/generate-oidc-token/v/${GITHUB_REF#refs/tags/v}'
+        description: "Published to npm. To install, run: npx @inrupt/generate-oidc-token@${GITHUB_REF#refs/tags/v}"
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         mediaType: '{"previews": ["flash", "ant-man"]}'
         state: success
