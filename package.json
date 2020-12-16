@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/inrupt/generate-oidc-token#readme",
   "devDependencies": {
+    "@types/express": "^4.17.9",
     "@types/jest": "^26.0.19",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
@@ -47,5 +48,10 @@
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
     "*.{ts,tsx,js,jsx,css,md,mdx}": "prettier --write"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@inrupt/solid-client-authn-core": "^1.2.2",
+    "@inrupt/solid-client-authn-node": "^1.2.2",
+    "express": "^4.17.1",
+    "yargs": "^16.2.0"
+  }
 }

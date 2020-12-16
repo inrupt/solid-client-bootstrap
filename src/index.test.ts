@@ -19,11 +19,4 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, it, expect } from "@jest/globals";
-import { helloWorld } from "./index";
-
-describe("helloWorld", () => {
-  it("returns hello world!", () => {
-    expect(helloWorld()).toEqual("hello world!");
-  });
-});
+// import { describe, it, expect } from "@jest/globals";
