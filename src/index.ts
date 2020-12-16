@@ -24,7 +24,10 @@ import { Session } from "@inrupt/solid-client-authn-node";
 import { InMemoryStorage } from "@inrupt/solid-client-authn-core";
 
 const argv = require("yargs/yargs")(process.argv.slice(2))
-  .describe("oidcIssuer", "The identity provider at which the user should authenticate.")
+  .describe(
+    "oidcIssuer",
+    "The identity provider at which the user should authenticate."
+  )
   .alias("issuer", "oidcIssuer")
   .describe("clientName", "The name of the bootstrapped app.")
   .demandOption(["oidcIssuer"])
@@ -48,17 +51,19 @@ const server = app.listen(PORT, async () => {
 
   console.log(`Listening at: [http://localhost:${PORT}].`);
   console.log(`Logging in ${argv.oidcIssuer} to get a refresh token.`);
-  session.login({
-    clientName: argv.clientName,
-    oidcIssuer: argv.oidcIssuer,
-    redirectUrl: iriBase,
-    tokenType: "DPoP",
-    handleRedirect: (url) => {
-      console.log(`\nPlease visit ${url} in a web browser.\n`);
-    },
-  }).catch((e) => {
-    throw new Error(`Login failed: ${e.toString()}`);
-  });
+  session
+    .login({
+      clientName: argv.clientName,
+      oidcIssuer: argv.oidcIssuer,
+      redirectUrl: iriBase,
+      tokenType: "DPoP",
+      handleRedirect: (url) => {
+        console.log(`\nPlease visit ${url} in a web browser.\n`);
+      },
+    })
+    .catch((e) => {
+      throw new Error(`Login failed: ${e.toString()}`);
+    });
 });
 
 app.get("/", async (_req, res) => {
@@ -70,8 +75,10 @@ app.get("/", async (_req, res) => {
   const rawStoredSession = await storage.get(
     `solidClientAuthenticationUser:${session.info.sessionId}`
   );
-  if(rawStoredSession === undefined) {
-    throw new Error(`Cannot find session with ID [${session.info.sessionId}] in storage.`);
+  if (rawStoredSession === undefined) {
+    throw new Error(
+      `Cannot find session with ID [${session.info.sessionId}] in storage.`
+    );
   }
   const storedSession = JSON.parse(rawStoredSession);
   console.log(`\nRefresh token: [${storedSession.refreshToken}]`);
@@ -83,5 +90,3 @@ app.get("/", async (_req, res) => {
   );
   server.close();
 });
-
-
