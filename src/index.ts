@@ -19,6 +19,73 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export function helloWorld() {
-  return "hello world!";
-}
+// The only import we need from the Node AuthN library is the Session class.
+import { Session, InMemoryStorage } from "@inrupt/solid-client-authn-node";
+
+const argv = require("yargs/yargs")(process.argv.slice(2))
+  .describe(
+    "oidcIssuer",
+    "The identity provider at which the user should authenticate."
+  )
+  .alias("issuer", "oidcIssuer")
+  .describe("clientName", "The name of the bootstrapped app.")
+  .demandOption(["oidcIssuer"])
+  .locale("en")
+  .help().argv;
+
+import express from "express";
+const app = express();
+const PORT = 3001;
+const iriBase = `http://localhost:${PORT}`;
+const storage = new InMemoryStorage();
+
+// Initialised when the server comes up and is running...
+let session: Session;
+
+const server = app.listen(PORT, async () => {
+  session = new Session({
+    insecureStorage: storage,
+    secureStorage: storage,
+  });
+
+  console.log(`Listening at: [http://localhost:${PORT}].`);
+  console.log(`Logging in ${argv.oidcIssuer} to get a refresh token.`);
+  session
+    .login({
+      clientName: argv.clientName,
+      oidcIssuer: argv.oidcIssuer,
+      redirectUrl: iriBase,
+      tokenType: "DPoP",
+      handleRedirect: (url) => {
+        console.log(`\nPlease visit ${url} in a web browser.\n`);
+      },
+    })
+    .catch((e) => {
+      throw new Error(`Login failed: ${e.toString()}`);
+    });
+});
+
+app.get("/", async (_req, res) => {
+  console.log("Login successful.");
+  await session.handleIncomingRedirect(`${iriBase}${_req.url}`);
+  // NB: This is a temporary approach, and we have work planned to properly
+  // collect the token. Please note that the next line is not part of the public
+  // API, and is therefore likely to break on non-major changes.
+  const rawStoredSession = await storage.get(
+    `solidClientAuthenticationUser:${session.info.sessionId}`
+  );
+  if (rawStoredSession === undefined) {
+    throw new Error(
+      `Cannot find session with ID [${session.info.sessionId}] in storage.`
+    );
+  }
+  const storedSession = JSON.parse(rawStoredSession);
+  console.log(`\nRefresh token: [${storedSession.refreshToken}]`);
+  console.log(`Client ID: [${storedSession.clientId}]`);
+  console.log(`Client Secret: [${storedSession.clientSecret}]`);
+
+  res.send(
+    "The tokens have been sent to the bootstraping app. You can close this window."
+  );
+  server.close();
+});

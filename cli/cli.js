@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 /**
  * Copyright 2020 Inrupt Inc.
  *
@@ -19,11 +21,4 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { describe, it, expect } from "@jest/globals";
-import { helloWorld } from "./index";
-
-describe("helloWorld", () => {
-  it("returns hello world!", () => {
-    expect(helloWorld()).toEqual("hello world!");
-  });
-});
+require("../dist/index.js");
