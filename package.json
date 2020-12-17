@@ -53,8 +53,8 @@
     "*.{ts,tsx,js,jsx,css,md,mdx}": "prettier --write"
   },
   "dependencies": {
-    "@inrupt/solid-client-authn-core": "^1.2.2",
-    "@inrupt/solid-client-authn-node": "^1.2.2",
+    "@inrupt/solid-client-authn-core": "^1.2.4",
+    "@inrupt/solid-client-authn-node": "^1.2.4",
     "express": "^4.17.1",
     "yargs": "^16.2.0"
   }
