@@ -20,8 +20,7 @@
  */
 
 // The only import we need from the Node AuthN library is the Session class.
-import { Session } from "@inrupt/solid-client-authn-node";
-import { InMemoryStorage } from "@inrupt/solid-client-authn-core";
+import { Session, InMemoryStorage } from "@inrupt/solid-client-authn-node";
 
 const argv = require("yargs/yargs")(process.argv.slice(2))
   .describe(
