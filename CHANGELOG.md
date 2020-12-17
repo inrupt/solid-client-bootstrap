@@ -6,4 +6,8 @@ The following changes have been implemented but not released yet:
 
 ## [Unreleased]
 
+### New features
+
+- `@inrupt/generate-oidc-token` can now be used with `npx`
+
 The following sections document changes that have been released already:
