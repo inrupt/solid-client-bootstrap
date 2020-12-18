@@ -19,7 +19,10 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-import { IDP_POD_COMPAT, IDP_POD_INRUPT } from "./constants";
+import {
+  IDENTITY_PROVIDER_INRUPT_PROD_COMPAT,
+  IDENTITY_PROVIDER_INRUPT_PROD,
+} from "./constants";
 import inquirer from "inquirer";
 
 const PROMPT_IDP_LIST = {
@@ -27,8 +30,8 @@ const PROMPT_IDP_LIST = {
   message: "What Solid Identity Provider do you want to register your app to?",
   name: "identityProvider",
   choices: [
-    { name: IDP_POD_INRUPT },
-    { name: IDP_POD_COMPAT },
+    { name: IDENTITY_PROVIDER_INRUPT_PROD },
+    { name: IDENTITY_PROVIDER_INRUPT_PROD_COMPAT },
     {
       name: "My Solid Identity provider is not on the list.",
       value: undefined,

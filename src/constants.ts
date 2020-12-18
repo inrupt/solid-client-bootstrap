@@ -19,5 +19,6 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-export const IDP_POD_INRUPT = "https://broker.pod.inrupt.com";
-export const IDP_POD_COMPAT = "https://broker.pod-compat.inrupt.com";
+export const IDENTITY_PROVIDER_INRUPT_PROD = "https://broker.pod.inrupt.com";
+export const IDENTITY_PROVIDER_INRUPT_PROD_COMPAT =
+  "https://broker.pod-compat.inrupt.com";
