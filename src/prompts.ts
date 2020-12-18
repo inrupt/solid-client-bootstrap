@@ -86,10 +86,16 @@ const PROMPT_PORT = {
   message: "On what port should the identity provider return the token?",
   name: "port",
   default: 3001,
+  validate: async (input: unknown) => {
+    if (!input || (input as number) < 0 || (input as number) >= 65536) {
+      return `The port must be a number in the [0;65536[ range, received [${input}].`;
+    }
+    return true;
+  },
 };
 
 export const promptPort = async () =>
-  (await inquirer.prompt([PROMPT_PORT])).port;
+  parseInt((await inquirer.prompt([PROMPT_PORT])).port);
 
 const PROMPT_CLIENT_INFO = [
   {
