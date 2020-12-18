@@ -154,7 +154,7 @@ async function main(): Promise<void> {
     console.log(`Client Secret: [${storedSession.clientSecret}]`);
 
     res.send(
-      "The tokens have been sent to the bootstraping app. You can close this window."
+      "The tokens have been sent to @inrupt/generate-oidc-token. You can close this window."
     );
     server.close();
   });
