@@ -20,72 +20,146 @@
  */
 
 // The only import we need from the Node AuthN library is the Session class.
-import { Session, InMemoryStorage } from "@inrupt/solid-client-authn-node";
-
-const argv = require("yargs/yargs")(process.argv.slice(2))
-  .describe(
-    "oidcIssuer",
-    "The identity provider at which the user should authenticate."
-  )
-  .alias("issuer", "oidcIssuer")
-  .describe("clientName", "The name of the bootstrapped app.")
-  .demandOption(["oidcIssuer"])
-  .locale("en")
-  .help().argv;
-
+import {
+  Session,
+  InMemoryStorage,
+  ILoginInputOptions,
+} from "@inrupt/solid-client-authn-node";
 import express from "express";
-const app = express();
-const PORT = 3001;
-const iriBase = `http://localhost:${PORT}`;
-const storage = new InMemoryStorage();
 
-// Initialised when the server comes up and is running...
-let session: Session;
+import {
+  promptApplicationName,
+  promptSolidIdentityProvider,
+  promptPort,
+  promptRegistrationType,
+  promptStaticClientInfo,
+} from "./prompts";
 
-const server = app.listen(PORT, async () => {
-  session = new Session({
+type InputOptions = {
+  solidIdentityProvider?: string;
+  applicationName?: string;
+  registrationType?: "static" | "dynamic";
+};
+
+type ValidatedOptions = {
+  solidIdentityProvider: string;
+  applicationName?: string;
+  registrationType: "static" | "dynamic";
+};
+
+async function main(): Promise<void> {
+  // Get CLI arguments
+  const argv = require("yargs/yargs")(process.argv.slice(2))
+    .describe(
+      "solidIdentityProvider",
+      "The identity provider at which the user should authenticate."
+    )
+    .alias("idp", "solidIdentityProvider")
+    .describe(
+      "applicationName",
+      "The name of the client application you whish to register."
+    )
+    .describe(
+      "registration",
+      "[static] if you want to manually register the client, [dynamic] otherwise."
+    )
+    .describe(
+      "port",
+      "@inrupt/generate-oidc-token will start a local web server, in order for the Solid Identity Provider to redirect the user back after they log in. This  is the port number to which this local server will be bound."
+    )
+    .locale("en")
+    .help().argv;
+
+  const inputOptions: InputOptions = {
+    ...argv,
+    clientName: argv.applicationName,
+  };
+  // Complete CLI arguments with user prompt
+  const validatedOptions: ValidatedOptions = {
+    solidIdentityProvider:
+      inputOptions.solidIdentityProvider ??
+      (await promptSolidIdentityProvider()),
+    registrationType:
+      inputOptions.registrationType ?? (await promptRegistrationType()),
+    applicationName:
+      inputOptions.applicationName ?? (await promptApplicationName()),
+  };
+  const port = argv.port ?? (await promptPort());
+
+  const app = express();
+  const iriBase = `http://localhost:${port}`;
+  const storage = new InMemoryStorage();
+
+  const session: Session = new Session({
     insecureStorage: storage,
     secureStorage: storage,
   });
 
-  console.log(`Listening at: [http://localhost:${PORT}].`);
-  console.log(`Logging in ${argv.oidcIssuer} to get a refresh token.`);
-  session
-    .login({
-      clientName: argv.clientName,
-      oidcIssuer: argv.oidcIssuer,
+  const server = app.listen(port, async () => {
+    console.log(`Listening at: [${iriBase}].`);
+    const loginOptions: ILoginInputOptions = {
+      clientName: validatedOptions.applicationName,
+      oidcIssuer: validatedOptions.solidIdentityProvider,
       redirectUrl: iriBase,
       tokenType: "DPoP",
       handleRedirect: (url) => {
         console.log(`\nPlease visit ${url} in a web browser.\n`);
       },
-    })
-    .catch((e) => {
-      throw new Error(`Login failed: ${e.toString()}`);
-    });
-});
+    };
+    let clientInfo;
+    if (validatedOptions.registrationType === "static") {
+      console.log(
+        `Please perform static registration of your application at the Solid Identity Provider [${validatedOptions.solidIdentityProvider}].`
+      );
+      console.log(
+        `The redirect IRI will be [${iriBase}] (you will need this information when registering your application).`
+      );
+      console.log(
+        "At the end of the registration process, you should get a client ID and secret."
+      );
+      clientInfo = await promptStaticClientInfo();
+      loginOptions.clientId = clientInfo.clientId;
+      loginOptions.clientSecret = clientInfo.clientSecret;
+    }
 
-app.get("/", async (_req, res) => {
-  console.log("Login successful.");
-  await session.handleIncomingRedirect(`${iriBase}${_req.url}`);
-  // NB: This is a temporary approach, and we have work planned to properly
-  // collect the token. Please note that the next line is not part of the public
-  // API, and is therefore likely to break on non-major changes.
-  const rawStoredSession = await storage.get(
-    `solidClientAuthenticationUser:${session.info.sessionId}`
-  );
-  if (rawStoredSession === undefined) {
-    throw new Error(
-      `Cannot find session with ID [${session.info.sessionId}] in storage.`
+    console.log(
+      `Logging into Solid Identity Provider  ${validatedOptions.solidIdentityProvider} to get a refresh token.`
     );
-  }
-  const storedSession = JSON.parse(rawStoredSession);
-  console.log(`\nRefresh token: [${storedSession.refreshToken}]`);
-  console.log(`Client ID: [${storedSession.clientId}]`);
-  console.log(`Client Secret: [${storedSession.clientSecret}]`);
+    session.login(loginOptions).catch((e) => {
+      throw new Error(
+        `Logging into Solid Identity Provider [${
+          validatedOptions.solidIdentityProvider
+        }] failed: ${e.toString()}`
+      );
+    });
+  });
 
-  res.send(
-    "The tokens have been sent to the bootstraping app. You can close this window."
-  );
-  server.close();
-});
+  app.get("/", async (_req, res) => {
+    console.log("Login successful.");
+    await session.handleIncomingRedirect(`${iriBase}${_req.url}`);
+    // NB: This is a temporary approach, and we have work planned to properly
+    // collect the token. Please note that the next line is not part of the public
+    // API, and is therefore likely to break on non-major changes.
+    const rawStoredSession = await storage.get(
+      `solidClientAuthenticationUser:${session.info.sessionId}`
+    );
+    if (rawStoredSession === undefined) {
+      throw new Error(
+        `Cannot find session with ID [${session.info.sessionId}] in storage.`
+      );
+    }
+    const storedSession = JSON.parse(rawStoredSession);
+    console.log(`\nRefresh token: [${storedSession.refreshToken}]`);
+    console.log(`Client ID: [${storedSession.clientId}]`);
+    console.log(`Client Secret: [${storedSession.clientSecret}]`);
+
+    res.send(
+      "The tokens have been sent to @inrupt/generate-oidc-token. You can close this window."
+    );
+    server.close();
+  });
+}
+
+// Asynchronous operations are required to get user prompt, and top-level await
+// are not supported yet, which is why an async main is used.
+void main();

@@ -9,7 +9,7 @@
     "build": "tsc",
     "prepublishOnly": "npm run build",
     "check-licenses": "license-checker --production --failOn \"AGPL-1.0-only; AGPL-1.0-or-later; AGPL-3.0-only; AGPL-3.0-or-later; Beerware; CC-BY-NC-1.0; CC-BY-NC-2.0; CC-BY-NC-2.5; CC-BY-NC-3.0; CC-BY-NC-4.0; CC-BY-NC-ND-1.0; CC-BY-NC-ND-2.0; CC-BY-NC-ND-2.5; CC-BY-NC-ND-3.0; CC-BY-NC-ND-4.0; CC-BY-NC-SA-1.0; CC-BY-NC-SA-2.0; CC-BY-NC-SA-2.5; CC-BY-NC-SA-3.0; CC-BY-NC-SA-4.0; CPAL-1.0; EUPL-1.0; EUPL-1.1; EUPL-1.1;  GPL-1.0-only; GPL-1.0-or-later; GPL-2.0-only;  GPL-2.0-or-later; GPL-3.0; GPL-3.0-only; GPL-3.0-or-later; SISSL;  SISSL-1.2; WTFPL\"",
-    "lint": "eslint --config .eslintrc.js --fix"
+    "lint": "eslint --config .eslintrc.js --fix; prettier --write src/*"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/inrupt/generate-oidc-token#readme",
   "devDependencies": {
     "@types/express": "^4.17.9",
+    "@types/inquirer": "^7.3.1",
     "@types/jest": "^26.0.19",
     "@typescript-eslint/eslint-plugin": "^4.10.0",
     "@typescript-eslint/parser": "^4.10.0",
@@ -51,8 +52,9 @@
     "*.{ts,tsx,js,jsx,css,md,mdx}": "prettier --write"
   },
   "dependencies": {
-    "@inrupt/solid-client-authn-node": "^1.2.4",
+    "@inrupt/solid-client-authn-node": "^1.2.5",
     "express": "^4.17.1",
+    "inquirer": "^7.3.3",
     "yargs": "^16.2.0"
   }
 }
