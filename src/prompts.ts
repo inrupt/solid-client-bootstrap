@@ -33,7 +33,8 @@ const PROMPT_IDP_LIST = {
     { name: IDENTITY_PROVIDER_INRUPT_PROD },
     { name: IDENTITY_PROVIDER_INRUPT_PROD_COMPAT },
     {
-      name: "My Solid Identity provider is not on the list.",
+      name:
+        "My Solid Identity provider is not on the list - please contact 'developer-support@inrupt.com' if you'd like to discuss adding a new provider.",
       value: undefined,
     },
   ],
@@ -42,7 +43,7 @@ const PROMPT_IDP_LIST = {
 const PROMPT_IDP_CUSTOM_INPUT = {
   type: "input",
   message:
-    "What is the URL of the Solid Identity Provider you want to register your app to?",
+    "What is the URL of the Solid Identity Provider you wish to register your application with?",
   name: "solidIdentityProvider",
   default: "",
 };
@@ -81,7 +82,7 @@ export const promptRegistrationType = async () =>
 
 const PROMPT_CLIENT_NAME = {
   type: "input",
-  message: "What is the name of the app you are registering?",
+  message: "What is the name of the application you are registering?",
   name: "clientName",
   default: undefined,
 };
@@ -97,7 +98,7 @@ const PROMPT_PORT = {
   default: 3001,
   validate: async (input: unknown) => {
     if (!input || (input as number) < 0 || (input as number) >= 65536) {
-      return `The port must be a number in the [0;65536[ range, received [${input}].`;
+      return `The port must be a number between 0 and 65536, we received [${input}].`;
     }
     return true;
   },
