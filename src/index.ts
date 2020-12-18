@@ -65,7 +65,7 @@ async function main(): Promise<void> {
     )
     .describe(
       "port",
-      "The port number on which the identity provider will return the token."
+      "@inrupt/generate-oidc-token will start a local web server, in order for the Solid Identity Provider to redirect the user back after they log in. This  is the port number to which this local server will be bound."
     )
     .locale("en")
     .help().argv;

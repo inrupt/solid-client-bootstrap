@@ -91,7 +91,8 @@ export const promptClientName = async () =>
 
 const PROMPT_PORT = {
   type: "number",
-  message: "On what port should the identity provider return the token?",
+  message:
+    "@inrupt/generate-oidc-token will start a local web server, in order for the Solid Identity Provider to redirect the user back after they log in. To what port should this local server be bound?",
   name: "port",
   default: 3001,
   validate: async (input: unknown) => {
