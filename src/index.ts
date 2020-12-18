@@ -37,14 +37,14 @@ import {
 
 type InputOptions = {
   solidIdentityProvider?: string;
-  clientName?: string;
+  applicationName?: string;
   registrationType?: "static" | "dynamic";
 };
 
 type ValidatedOptions = {
   solidIdentityProvider: string;
+  applicationName?: string;
   registrationType: "static" | "dynamic";
-  clientName?: string;
 };
 
 async function main(): Promise<void> {
@@ -55,7 +55,10 @@ async function main(): Promise<void> {
       "The identity provider at which the user should authenticate."
     )
     .alias("idp", "solidIdentityProvider")
-    .describe("appName", "The name of the app you are registering.")
+    .describe(
+      "applicationName",
+      "The name of the client application you whish to register."
+    )
     .describe(
       "registration",
       "[static] if you want to manually register the client, [dynamic] otherwise."
@@ -69,7 +72,7 @@ async function main(): Promise<void> {
 
   const inputOptions: InputOptions = {
     ...argv,
-    clientName: argv.appName,
+    clientName: argv.applicationName,
   };
   // Complete CLI arguments with user prompt
   const validatedOptions: ValidatedOptions = {
@@ -77,7 +80,7 @@ async function main(): Promise<void> {
       inputOptions.solidIdentityProvider ?? (await promptIdp()),
     registrationType:
       inputOptions.registrationType ?? (await promptRegistration()),
-    clientName: inputOptions.clientName ?? (await promptClientName()),
+    applicationName: inputOptions.applicationName ?? (await promptClientName()),
   };
   const port = argv.port ?? (await promptPort());
 
@@ -93,7 +96,7 @@ async function main(): Promise<void> {
   const server = app.listen(port, async () => {
     console.log(`Listening at: [${iriBase}].`);
     const loginOptions: ILoginInputOptions = {
-      clientName: validatedOptions.clientName,
+      clientName: validatedOptions.applicationName,
       oidcIssuer: validatedOptions.solidIdentityProvider,
       redirectUrl: iriBase,
       tokenType: "DPoP",
