@@ -47,7 +47,7 @@ const PROMPT_IDP_CUSTOM_INPUT = {
   default: "",
 };
 
-export async function promptIdp(): Promise<string> {
+export async function promptSolidIdentityProvider(): Promise<string> {
   let { identityProvider: solidIdentityProvider } = await inquirer.prompt([
     PROMPT_IDP_LIST,
   ]);
@@ -76,7 +76,7 @@ const PROMPT_REGISTRATION_TYPE = {
   default: "dynamic",
 };
 
-export const promptRegistration = async () =>
+export const promptRegistrationType = async () =>
   (await inquirer.prompt([PROMPT_REGISTRATION_TYPE])).registrationType;
 
 const PROMPT_CLIENT_NAME = {
@@ -86,7 +86,7 @@ const PROMPT_CLIENT_NAME = {
   default: undefined,
 };
 
-export const promptClientName = async () =>
+export const promptApplicationName = async () =>
   (await inquirer.prompt([PROMPT_CLIENT_NAME])).clientName;
 
 const PROMPT_PORT = {

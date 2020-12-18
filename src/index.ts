@@ -28,10 +28,10 @@ import {
 import express from "express";
 
 import {
-  promptClientName,
-  promptIdp,
+  promptApplicationName,
+  promptSolidIdentityProvider,
   promptPort,
-  promptRegistration,
+  promptRegistrationType,
   promptStaticClientInfo,
 } from "./prompts";
 
@@ -77,10 +77,12 @@ async function main(): Promise<void> {
   // Complete CLI arguments with user prompt
   const validatedOptions: ValidatedOptions = {
     solidIdentityProvider:
-      inputOptions.solidIdentityProvider ?? (await promptIdp()),
+      inputOptions.solidIdentityProvider ??
+      (await promptSolidIdentityProvider()),
     registrationType:
-      inputOptions.registrationType ?? (await promptRegistration()),
-    applicationName: inputOptions.applicationName ?? (await promptClientName()),
+      inputOptions.registrationType ?? (await promptRegistrationType()),
+    applicationName:
+      inputOptions.applicationName ?? (await promptApplicationName()),
   };
   const port = argv.port ?? (await promptPort());
 
