@@ -24,30 +24,35 @@ import inquirer from "inquirer";
 
 const PROMPT_IDP_LIST = {
   type: "list",
-  message: "What Identity Provider do you want to register your app to?",
+  message: "What Solid Identity Provider do you want to register your app to?",
   name: "identityProvider",
   choices: [
     { name: IDP_POD_INRUPT },
     { name: IDP_POD_COMPAT },
-    { name: "My Identity provider is not on the list.", value: undefined },
+    {
+      name: "My Solid Identity provider is not on the list.",
+      value: undefined,
+    },
   ],
 };
 
 const PROMPT_IDP_CUSTOM_INPUT = {
   type: "input",
   message:
-    "What is the URL of the Identity Provider you want to register your app to?",
-  name: "identityProvider",
+    "What is the URL of the Solid Identity Provider you want to register your app to?",
+  name: "solidIdentityProvider",
   default: "",
 };
 
 export async function promptIdp(): Promise<string> {
-  let { identityProvider } = await inquirer.prompt([PROMPT_IDP_LIST]);
-  if (identityProvider === undefined) {
-    identityProvider = (await inquirer.prompt([PROMPT_IDP_CUSTOM_INPUT]))
-      .identityProvider;
+  let { identityProvider: solidIdentityProvider } = await inquirer.prompt([
+    PROMPT_IDP_LIST,
+  ]);
+  if (solidIdentityProvider === undefined) {
+    solidIdentityProvider = (await inquirer.prompt([PROMPT_IDP_CUSTOM_INPUT]))
+      .solidIdentityProvider;
   }
-  return identityProvider;
+  return solidIdentityProvider;
 }
 
 const PROMPT_REGISTRATION_TYPE = {

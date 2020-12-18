@@ -36,13 +36,13 @@ import {
 } from "./prompts";
 
 type InputOptions = {
-  identityProvider?: string;
+  solidIdentityProvider?: string;
   clientName?: string;
-  registrationType?: ["static, dynamic"];
+  registrationType?: "static" | "dynamic";
 };
 
 type ValidatedOptions = {
-  identityProvider: string;
+  solidIdentityProvider: string;
   registrationType: "static" | "dynamic";
   clientName?: string;
 };
@@ -51,11 +51,11 @@ async function main(): Promise<void> {
   // Get CLI arguments
   const argv = require("yargs/yargs")(process.argv.slice(2))
     .describe(
-      "identityProvider",
+      "solidIdentityProvider",
       "The identity provider at which the user should authenticate."
     )
-    .alias("idp", "identityProvider")
-    .describe("clientName", "The name of the bootstrapped app.")
+    .alias("idp", "solidIdentityProvider")
+    .describe("appName", "The name of the app you are registering.")
     .describe(
       "registration",
       "[static] if you want to manually register the client, [dynamic] otherwise."
@@ -67,10 +67,14 @@ async function main(): Promise<void> {
     .locale("en")
     .help().argv;
 
-  const inputOptions: InputOptions = argv;
+  const inputOptions: InputOptions = {
+    ...argv,
+    clientName: argv.appName,
+  };
   // Complete CLI arguments with user prompt
   const validatedOptions: ValidatedOptions = {
-    identityProvider: inputOptions.identityProvider ?? (await promptIdp()),
+    solidIdentityProvider:
+      inputOptions.solidIdentityProvider ?? (await promptIdp()),
     registrationType:
       inputOptions.registrationType ?? (await promptRegistration()),
     clientName: inputOptions.clientName ?? (await promptClientName()),
@@ -90,7 +94,7 @@ async function main(): Promise<void> {
     console.log(`Listening at: [${iriBase}].`);
     const loginOptions: ILoginInputOptions = {
       clientName: validatedOptions.clientName,
-      oidcIssuer: validatedOptions.identityProvider,
+      oidcIssuer: validatedOptions.solidIdentityProvider,
       redirectUrl: iriBase,
       tokenType: "DPoP",
       handleRedirect: (url) => {
@@ -100,7 +104,7 @@ async function main(): Promise<void> {
     let clientInfo;
     if (validatedOptions.registrationType === "static") {
       console.log(
-        `Please go perform the static registration of your application to [${validatedOptions.identityProvider}].`
+        `Please go perform the static registration of your application to [${validatedOptions.solidIdentityProvider}].`
       );
       console.log(`The redirect IRI will be ${iriBase}`);
       console.log(
@@ -112,7 +116,7 @@ async function main(): Promise<void> {
     }
 
     console.log(
-      `Logging in ${validatedOptions.identityProvider} to get a refresh token.`
+      `Logging in ${validatedOptions.solidIdentityProvider} to get a refresh token.`
     );
     session.login(loginOptions).catch((e) => {
       throw new Error(`Login failed: ${e.toString()}`);
