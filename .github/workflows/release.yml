@@ -59,7 +59,7 @@ jobs:
         npm publish --access public
         echo "Package published. To use, run:"
         echo ""
-        echo "    npx install @inrupt/generate-oidc-token"
+        echo "    npx @inrupt/generate-oidc-token"
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     - name: Mark GitHub Deployment as successful
