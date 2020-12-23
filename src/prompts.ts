@@ -27,7 +27,7 @@ import inquirer from "inquirer";
 
 const PROMPT_IDP_LIST = {
   type: "list",
-  message: "What Solid Identity Provider do you want to register your app to?",
+  message: "What Solid Identity Provider do you want to log in to?",
   name: "identityProvider",
   choices: [
     { name: IDENTITY_PROVIDER_INRUPT_PROD },
@@ -43,7 +43,7 @@ const PROMPT_IDP_LIST = {
 const PROMPT_IDP_CUSTOM_INPUT = {
   type: "input",
   message:
-    "What is the URL of the Solid Identity Provider you wish to register your application with?",
+    "What is the URL of the Solid Identity Provider you wish to log in to?",
   name: "solidIdentityProvider",
   default: "",
 };
@@ -62,16 +62,16 @@ export async function promptSolidIdentityProvider(): Promise<string> {
 const PROMPT_REGISTRATION_TYPE = {
   type: "list",
   message:
-    "Do you want your app to go through static, or dynamic registration?",
+    "Has your app been pre-registered by the administrator of the Pod server you are signing in to?",
   name: "registrationType",
   choices: [
     {
-      name: "Static: more manual steps, but longer-lived credentials",
-      value: "static",
+      name: "No.",
+      value: "dynamic",
     },
     {
-      name: "Dynamic: less configuration, but credentials expire quicker.",
-      value: "dynamic",
+      name: "Yes, and I have received a client ID and client secret.",
+      value: "static",
     },
   ],
   default: "dynamic",
@@ -93,7 +93,7 @@ export const promptApplicationName = async () =>
 const PROMPT_PORT = {
   type: "number",
   message:
-    "@inrupt/generate-oidc-token will start a local web server, in order for the Solid Identity Provider to redirect the user back after they log in. To what port should this local server be bound?",
+    "@inrupt/generate-oidc-token will start a local web server, to which the Solid Identity Provider can redirect the user back after they log in. On what port do you want to run this server?",
   name: "port",
   default: 3001,
   validate: async (input: unknown) => {
