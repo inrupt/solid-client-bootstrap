@@ -109,25 +109,20 @@ async function main(): Promise<void> {
     let clientInfo;
     if (validatedOptions.registrationType === "static") {
       console.log(
-        `Please perform static registration of your application at the Solid Identity Provider [${validatedOptions.solidIdentityProvider}].`
+        `An admin of the server should have registered your app with a redirect URL of [${iriBase}],`
       );
-      console.log(
-        `The redirect IRI will be [${iriBase}] (you will need this information when registering your application).`
-      );
-      console.log(
-        "At the end of the registration process, you should get a client ID and secret."
-      );
+      console.log("and have provided you with a client ID and secret.");
       clientInfo = await promptStaticClientInfo();
       loginOptions.clientId = clientInfo.clientId;
       loginOptions.clientSecret = clientInfo.clientSecret;
     }
 
     console.log(
-      `Logging into Solid Identity Provider  ${validatedOptions.solidIdentityProvider} to get a refresh token.`
+      `Logging in to Solid Identity Provider  ${validatedOptions.solidIdentityProvider} to get a refresh token.`
     );
     session.login(loginOptions).catch((e) => {
       throw new Error(
-        `Logging into Solid Identity Provider [${
+        `Logging in to Solid Identity Provider [${
           validatedOptions.solidIdentityProvider
         }] failed: ${e.toString()}`
       );
