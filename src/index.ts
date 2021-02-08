@@ -144,10 +144,15 @@ async function main(): Promise<void> {
       );
     }
     const storedSession = JSON.parse(rawStoredSession);
-    console.log(`\nRefresh token: [${storedSession.refreshToken}]`);
-    console.log(`Client ID: [${storedSession.clientId}]`);
-    console.log(`Client Secret: [${storedSession.clientSecret}]`);
-
+    console.log(`
+These are your login credentials:
+{
+  "refreshToken" : "${storedSession.refreshToken}",
+  "clientId"     : "${storedSession.clientId}",
+  "clientSecret" : "${storedSession.clientSecret}",
+  "oidcIssuer"   : "${storedSession.issuer}",
+}
+`);
     res.send(
       "The tokens have been sent to @inrupt/generate-oidc-token. You can close this window."
     );
