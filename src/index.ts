@@ -147,10 +147,10 @@ async function main(): Promise<void> {
     console.log(`
 These are your login credentials:
 {
-  token        : "${storedSession.refreshToken}",
-  clientId     : "${storedSession.clientId}",
-  clientSecret : "${storedSession.clientSecret}",
-  oidcIssuer   : "${storedSession.issuer}",
+  "refreshToken" : "${storedSession.refreshToken}",
+  "clientId"     : "${storedSession.clientId}",
+  "clientSecret" : "${storedSession.clientSecret}",
+  "oidcIssuer"   : "${storedSession.issuer}",
 }
 `);
     res.send(
