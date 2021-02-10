@@ -6,12 +6,14 @@ The following changes have been implemented but not released yet:
 
 ## [Unreleased]
 
+The following sections document changes that have been released already:
+
+## 0.1.0 - 2020-02-10
+
 ### New features
 
 - The result is now displayed as a JSON snippet that may directly be pasted as the
   input of `@inrupt/solid-client-authn-node` `Session::login` function.
-
-The following sections document changes that have been released already:
 
 ## 0.0.1 - 2020-12-18
 
