@@ -1,9 +1,11 @@
 {
   "name": "@inrupt/generate-oidc-token",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A small app to help scripts access private resources on Solid Pods",
   "main": "dist/index.js",
-  "bin": "cli/cli.js",
+  "bin": {
+    "generate-oidc-token": "cli/cli.js"
+  },
   "scripts": {
     "test": "eslint --config .eslintrc.js \"src/\" --ext .js,.jsx,.ts,.tsx && jest --passWithNoTests",
     "build": "tsc",
