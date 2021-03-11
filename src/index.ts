@@ -134,7 +134,7 @@ async function main(): Promise<void> {
     console.log(
       `Login into the Identity Provider successful, receiving request to redirect IRI [${redirectIri}].`
     );
-    await session.handleIncomingRedirect(`${redirectIri}`);
+    await session.handleIncomingRedirect(redirectIri);
     // NB: This is a temporary approach, and we have work planned to properly
     // collect the token. Please note that the next line is not part of the public
     // API, and is therefore likely to break on non-major changes.
