@@ -1,6 +1,6 @@
 {
   "name": "@inrupt/generate-oidc-token",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A small app to help scripts access private resources on Solid Pods",
   "main": "dist/index.js",
   "bin": {
