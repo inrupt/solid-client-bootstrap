@@ -6,13 +6,15 @@ The following changes have been implemented but not released yet:
 
 ## [Unreleased]
 
+The following sections document changes that have been released already:
+
+## 0.1.1 - 2021-03-12
+
 ### Bugfix
 
 - Redirect IRI normalization now uses the `URL` constructor instead of a basic concatenation.
 
-The following sections document changes that have been released already:
-
-## 0.1.0 - 2020-02-10
+## 0.1.0 - 2021-02-10
 
 ### New features
 
