@@ -15,7 +15,6 @@ jobs:
   prepare-deployment:
     runs-on: ubuntu-20.04
     outputs:
-      tag-slug: ${{ steps.determine-npm-tag.outputs.tag-slug }}
       deployment-id: ${{ fromJson(steps.create-deployment.outputs.data).id }}
     steps:
     - name: Create GitHub Deployment
@@ -35,10 +34,9 @@ jobs:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
     - name: Determine npm tag
       id: determine-npm-tag
-      run: |
-        # Remove non-alphanumeric characters
-        # See https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
-        echo "::set-output name=tag-slug::$(echo ${GITHUB_REF#refs/heads/} | tr -cd '[:alnum:]-')"
+      # Remove non-alphanumeric characters
+      # See https://help.github.com/en/actions/reference/workflow-commands-for-github-actions#setting-an-environment-variable
+      run: echo "TAG_SLUG=$(echo ${GITHUB_REF#refs/heads/} | tr -cd '[:alnum:]-')" >> $GITHUB_ENV
 
   publish-npm:
     runs-on: ubuntu-20.04
@@ -55,7 +53,7 @@ jobs:
         repository: ${{ github.repository }}
         deployment: ${{ needs.prepare-deployment.outputs.deployment-id }}
         environment: review
-        description: "Publishing to npm tag [${{ needs.prepare-deployment.outputs.tag-slug }}]…"
+        description: "Publishing to npm tag [$TAG_SLUG]…"
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         state: in_progress
         mediaType: '{"previews": ["flash", "ant-man"]}'
@@ -77,8 +75,6 @@ jobs:
         # Make sure the prerelease is tagged with the branch name, and that they are sorted by build:
         VERSION_NR=$(npm version prerelease --preid=$TAG_SLUG-$GITHUB_RUN_ID-$GITHUB_RUN_NUMBER-$TIMESTAMP)
         echo "::set-output name=version-nr::$VERSION_NR"
-      env:
-        TAG_SLUG: ${{ needs.prepare-deployment.outputs.tag-slug }}
     - run: npm ci
     - name: Publish an npm tag for this branch
       run: |
@@ -86,13 +82,12 @@ jobs:
         #     if: secrets.NPM_TOKEN != ''
         # so simply skip the command if the env var is not set:
         if [ -z $NODE_AUTH_TOKEN ]; then echo "No npm token defined; package not published."; fi
-        if [ -n $NODE_AUTH_TOKEN ]; then npm publish --access public --tag "$TAG_SLUG"; fi
+        if [ -n $NODE_AUTH_TOKEN ]; then npm publish --access public --dist-tag "$TAG_SLUG"; fi
         if [ -n $NODE_AUTH_TOKEN ]; then echo "Package published. To install, run:"; fi
         if [ -n $NODE_AUTH_TOKEN ]; then echo ""; fi
         if [ -n $NODE_AUTH_TOKEN ]; then echo "    npx @inrupt/generate-oidc-token@$TAG_SLUG"; fi
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        TAG_SLUG: ${{ needs.prepare-deployment.outputs.tag-slug }}
     - name: Mark GitHub Deployment as successful
       uses: octokit/request-action@v2.x
       with:
@@ -100,8 +95,8 @@ jobs:
         repository: ${{ github.repository }}
         deployment: ${{ needs.prepare-deployment.outputs.deployment-id }}
         environment: review
-        environment_url: 'https://www.npmjs.com/package/@inrupt/generate-oidc-token/v/${{ needs.prepare-deployment.outputs.tag-slug }}'
-        description: "Published to npm. To install, run: npm install @inrupt/generate-oidc-token@${{ needs.prepare-deployment.outputs.tag-slug }}"
+        environment_url: 'https://www.npmjs.com/package/@inrupt/generate-oidc-token/v/$TAG_SLUG'
+        description: "Published to npm. To install, run: npm install @inrupt/generate-oidc-token@$TAG_SLUG"
         log_url: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
         mediaType: '{"previews": ["flash", "ant-man"]}'
         state: success
