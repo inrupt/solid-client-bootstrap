@@ -17,6 +17,7 @@ jobs:
     outputs:
       tag-slug: ${{ steps.determine-npm-tag.outputs.tag-slug }}
       deployment-id: ${{ fromJson(steps.create-deployment.outputs.data).id }}
+    if: ${{ github.actor != 'dependabot[bot]' }}
     steps:
     - name: Create GitHub Deployment
       id: create-deployment
@@ -43,6 +44,7 @@ jobs:
   publish-npm:
     runs-on: ubuntu-20.04
     needs: [prepare-deployment]
+    if: ${{ github.actor != 'dependabot[bot]' }}
     outputs:
       version-nr: ${{ steps.determine-npm-version.outputs.version-nr }}
     steps:
