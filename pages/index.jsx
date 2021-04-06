@@ -18,6 +18,16 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module.exports = {
-  extends: ["@inrupt/eslint-config-react"],
-};
+
+import { useSession } from "@inrupt/solid-ui-react";
+
+export default function Home() {
+  const { session } = useSession();
+
+  return (
+    <div>
+      <h1>Demo</h1>
+      {session.info.isLoggedIn && <p>Logged in as: {session.info.webId}</p>}
+    </div>
+  );
+}

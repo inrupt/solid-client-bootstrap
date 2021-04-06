@@ -18,6 +18,14 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module.exports = {
-  extends: ["@inrupt/eslint-config-react"],
-};
+
+/* eslint import/extensions: 0 */
+import packageJson from "./package.json";
+
+export default () => ({
+  libraryRepoUrl: packageJson.repository.url,
+  demoRepoUrl: packageJson.repository.url,
+  copyright: "Copyright 2021 Inrupt, Inc.",
+  demoTitle: "Refresh token utility",
+  demoDescription: "Get a refresh token to run authenticated scripts",
+});

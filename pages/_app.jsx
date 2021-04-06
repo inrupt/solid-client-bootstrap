@@ -18,6 +18,28 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module.exports = {
-  extends: ["@inrupt/eslint-config-react"],
-};
+
+import { useEffect } from "react";
+import AppContainer from "../components/appContainer";
+
+import "./styles.css";
+
+/* eslint react/prop-types: 0, react/jsx-props-no-spreading: 0 */
+function MyApp({ Component, pageProps }) {
+  // Remove injected serverside JSS
+  useEffect(() => {
+    const jssStyles = document.querySelector("#jss-server-side");
+
+    if (jssStyles && jssStyles.parentElement) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
+  return (
+    <AppContainer>
+      <Component {...pageProps} />
+    </AppContainer>
+  );
+}
+
+export default MyApp;

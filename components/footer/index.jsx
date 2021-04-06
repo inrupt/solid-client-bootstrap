@@ -18,6 +18,29 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module.exports = {
-  extends: ["@inrupt/eslint-config-react"],
-};
+
+import { Footer } from "@inrupt/prism-react-components";
+
+import config from "../../config";
+
+const CONFIG = config();
+
+const footerLinks = [
+  {
+    text: "View Demo on GitHub",
+    href: CONFIG.libraryRepoUrl,
+  },
+  {
+    text: "View Project on GitHub",
+    href: CONFIG.demoRepoUrl,
+  },
+];
+
+const footerTexts = [
+  {
+    text: CONFIG.copyright,
+    icon: "icon-copyright",
+  },
+];
+
+export default () => <Footer texts={footerTexts} links={footerLinks} />;
