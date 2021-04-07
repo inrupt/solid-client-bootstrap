@@ -59,3 +59,45 @@ body,
   font-size: 100% !important;
   height: 100%;
 }
+
+form {
+  margin: 0 auto;
+  max-width: 50em;
+}
+
+label {
+  display: inline-block;
+  width: 150px;
+}
+
+#idpSelect {
+  width: 300;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 150px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  top: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
