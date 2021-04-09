@@ -18,40 +18,34 @@
  * OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
-module.exports = {
-  env: {
-    es6: true,
-    node: true,
+
+import {
+  makeStyles,
+  createStyles,
+  MainNav,
+} from "@inrupt/prism-react-components";
+
+import { useBem, appLayout } from "@solid/lit-prism-patterns";
+
+import theme from "../../src/theme";
+
+const navLinks = [
+  {
+    icon: "files",
+    text: "Demo",
+    active: true,
+    href: "/",
   },
-  extends: [
-    "eslint:recommended",
-    "@inrupt/eslint-config-base",
-    "@inrupt/eslint-config-react-ts",
-    "plugin:@typescript-eslint/eslint-recommended",
-    "plugin:jest/recommended",
-    "plugin:jest/style",
-  ],
-  globals: {
-    Atomics: "readonly",
-    SharedArrayBuffer: "readonly",
-  },
-  parser: "@typescript-eslint/parser",
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: "module",
-    tsconfigRootDir: __dirname,
-    project: ["./tsconfig.json"],
-  },
-  plugins: ["@typescript-eslint", "jest", "license-header", "import"],
-  rules: {
-    // There's a TypeScript-specific version of this rule;
-    // we disable the generic one, because it thinks imported types are unused
-    // when they're not:
-    "no-unused-vars": "off",
-    "@typescript-eslint/no-floating-promises": "error",
-    "license-header/header": [
-      process.env.CI ? "error" : "warn",
-      "./resources/license-header.js",
-    ],
-  },
+];
+
+const useStyles = makeStyles(() => createStyles(appLayout.styles(theme)));
+
+export default () => {
+  const bem = useBem(useStyles());
+
+  return (
+    <div className={bem("app-layout__mobile-nav")}>
+      <MainNav links={navLinks} />;
+    </div>
+  );
 };

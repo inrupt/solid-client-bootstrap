@@ -19,11 +19,11 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+import inquirer from "inquirer";
 import {
   IDENTITY_PROVIDER_INRUPT_PROD_COMPAT,
   IDENTITY_PROVIDER_INRUPT_PROD,
 } from "./constants";
-import inquirer from "inquirer";
 
 const PROMPT_IDP_LIST = {
   type: "list",
@@ -105,7 +105,7 @@ const PROMPT_PORT = {
 };
 
 export const promptPort = async () =>
-  parseInt((await inquirer.prompt([PROMPT_PORT])).port);
+  parseInt((await inquirer.prompt([PROMPT_PORT])).port, 10);
 
 const PROMPT_CLIENT_INFO = [
   {

@@ -47,8 +47,11 @@ type ValidatedOptions = {
   registrationType: "static" | "dynamic";
 };
 
+/* eslint-disable no-console */
+
 async function main(): Promise<void> {
   // Get CLI arguments
+  // eslint-disable-next-line prefer-destructuring, global-require
   const argv = require("yargs/yargs")(process.argv.slice(2))
     .describe(
       "solidIdentityProvider",
@@ -165,4 +168,4 @@ These are your login credentials:
 
 // Asynchronous operations are required to get user prompt, and top-level await
 // are not supported yet, which is why an async main is used.
-void main();
+main().catch((error) => console.log);
