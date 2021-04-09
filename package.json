@@ -4,7 +4,7 @@
   "description": "A small app to help scripts access private resources on Solid Pods",
   "main": "dist/index.js",
   "bin": {
-    "generate-oidc-token": "cli/cli.js"
+    "generate-oidc-token": "./start.js"
   },
   "scripts": {
     "test": "eslint --config .eslintrc.js \"src/\" --ext .js,.jsx,.ts,.tsx && jest --passWithNoTests",
