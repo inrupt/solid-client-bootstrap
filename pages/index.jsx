@@ -56,6 +56,7 @@ export default function Home() {
   );
   const [webId, setWebId] = useState();
   const [clientInfo, setClientInfo] = useState({});
+  const [inputErrorMessage, setInputErrorMessage] = useState();
 
   useEffect(() => {
     const url = new URL(window.location.href);
@@ -76,10 +77,14 @@ export default function Home() {
     // The default behaviour of the button is to resubmit.
     // This prevents the page from reloading.
     e.preventDefault();
-    const redirectTo = new URL("http://localhost:3000/api/login");
-    redirectTo.searchParams.set("name", clientName);
-    redirectTo.searchParams.set("issuer", encodeURIComponent(providerIri));
-    window.location.href = redirectTo.href;
+    if (providerIri) {
+      const redirectTo = new URL("http://localhost:3000/api/login");
+      redirectTo.searchParams.set("name", clientName);
+      redirectTo.searchParams.set("issuer", encodeURIComponent(providerIri));
+      window.location.href = redirectTo.href;
+    } else {
+      setInputErrorMessage("Setting an Identity Provider is required.");
+    }
   };
 
   function setupOnProviderChange(providerIriSetter, LoginErrorSetter) {
@@ -99,27 +104,55 @@ export default function Home() {
 
   const onProviderChange = setupOnProviderChange(setProviderIri, setLoginError);
 
+  function SessionInfo() {
+    if (webId) {
+      return (
+        <p>
+          Logged in as <code>{webId}</code>
+        </p>
+      );
+    }
+    return <></>;
+  }
+
+  function ClientInfo() {
+    if (clientInfo.clientId) {
+      return (
+        <div>
+          <p>Your credentials are:</p>
+          <pre>{JSON.stringify(clientInfo, null, "  ")}</pre>
+        </div>
+      );
+    }
+    return <></>;
+  }
+
+  function InputErrorMessage() {
+    if (inputErrorMessage) {
+      return <p>{inputErrorMessage}</p>;
+    }
+    return <></>;
+  }
+
+  // FIXME
+  /* eslint-disable react/jsx-props-no-spreading */
+
   return (
     <div>
       <h1>Get an token for authenticating a Solid script</h1>
-      <p>
-        Logged in as <code>{webId}</code>
-      </p>
-      <p>Your credentials are:</p>
-      <pre>{JSON.stringify(clientInfo, null, "  ")}</pre>
+      <SessionInfo />
+      <ClientInfo />
       <form>
-        <div>
-          <label>
-            Identity provider{" "}
-            <div className="tooltip">
-              (?)
-              <span className="tooltiptext">
-                The Identity Provider is the service that provides you with an
-                account associated to a login, password and/or other
-                authentication methods.
-              </span>
-            </div>
-          </label>
+        <label>
+          Identity provider *{" "}
+          <div className="tooltip">
+            (?)
+            <span className="tooltiptext">
+              The Identity Provider is the service that provides you with an
+              account associated to a login, password and/or other
+              authentication methods.
+            </span>
+          </div>
           <FormControl>
             <Autocomplete
               onChange={onProviderChange}
@@ -144,31 +177,34 @@ export default function Home() {
               )}
             />
           </FormControl>
-        </div>
-        <div>
-          <label>
-            Application name{" "}
-            <div className="tooltip">
-              (?)
-              <span className="tooltiptext">
-                The application name is displayed to the user when they are
-                asked to authorize the application to access their data.
-              </span>
-            </div>
-          </label>
-
+        </label>
+        <br />
+        <label>
+          Application name{" "}
+          <div className="tooltip">
+            (?)
+            <span className="tooltiptext">
+              The application name is displayed to the user when they are asked
+              to authorize the application to access their data.
+            </span>
+          </div>
           <TextField
             margin="none"
             variant="outlined"
             aria-describedby={loginError ? "login-error-text" : null}
             value={clientName}
+            style={{ width: 300 }}
             onChange={(e) => {
               setClientName(e.target.value);
             }}
           />
-        </div>
-        <button onClick={(e) => handleTokenGeneration(e)}>Get a token</button>
+        </label>
+        <br />
+        <button type="button" onClick={(e) => handleTokenGeneration(e)}>
+          Get a token
+        </button>
       </form>
+      <InputErrorMessage />
     </div>
   );
 }
