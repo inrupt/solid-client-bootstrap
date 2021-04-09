@@ -20,7 +20,6 @@
  */
 
 module.exports = {
-  preset: "ts-jest",
   testEnvironment: "node",
   clearMocks: true,
   collectCoverage: true,
@@ -33,8 +32,6 @@ module.exports = {
     },
   },
   coveragePathIgnorePatterns: ["/node_modules/", "<rootDir>/dist"],
-  testPathIgnorePatterns: [
-    "/node_modules/",
-  ],
+  testPathIgnorePatterns: ["/node_modules/"],
   injectGlobals: false,
 };
