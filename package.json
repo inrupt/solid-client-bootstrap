@@ -50,7 +50,7 @@
     "*.{ts,tsx,js,jsx,css,md,mdx}": "prettier --write"
   },
   "dependencies": {
-    "@inrupt/solid-client-authn-node": "^1.7.2",
+    "@inrupt/solid-client-authn-node": "^1.7.4-fixjwt-alg-expected-validation-751934454-5616-1618488441.0",
     "express": "^4.17.1",
     "inquirer": "^7.3.3",
     "yargs": "^16.2.0"
