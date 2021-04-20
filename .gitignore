@@ -109,3 +109,4 @@ coverage
 dist
 .eslintcache
 .env*.local
+storage.json

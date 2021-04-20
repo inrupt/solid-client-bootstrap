@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 /**
  * Copyright 2020 Inrupt Inc.
  *
@@ -21,4 +19,23 @@
  * SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-require("../dist/index.js");
+import { Session } from "@inrupt/solid-client-authn-node";
+import { storage } from "../../lib/storage";
+
+export default async function login(req, res) {
+  const session = new Session({
+    storage,
+  });
+  const currentUrl = new URL(req.url, "http://localhost:3000");
+
+  const clientName = currentUrl.searchParams.get("name");
+  const issuer = decodeURIComponent(currentUrl.searchParams.get("issuer"));
+  await session.login({
+    redirectUrl: `http://localhost:3000/api/redirect/${session.info.sessionId}`,
+    oidcIssuer: issuer,
+    clientName,
+    handleRedirect: (redirectUrl) => {
+      res.redirect(301, redirectUrl);
+    },
+  });
+}
