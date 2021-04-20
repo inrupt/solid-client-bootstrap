@@ -6,6 +6,12 @@ The following changes have been implemented but not released yet:
 
 ## [Unreleased]
 
+### Breaking change
+
+- So far, `@inrupt/generate-oidc-token` was a CLI tool. It is now a Web application.
+  It is still intended to be locally runnable using `npx`, but the user experience
+  changes quite a bit.
+
 The following sections document changes that have been released already:
 
 ## 0.1.1 - 2021-03-12
