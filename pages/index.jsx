@@ -21,6 +21,42 @@
 
 import React, { useEffect, useState } from "react";
 import { TextField } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
+
+const providers = [
+  {
+    logo: "solid-logo.svg",
+    label: "broker.pod.inrupt.com",
+    iri: "https://broker.pod.inrupt.com",
+  },
+  {
+    logo: "solid-logo.svg",
+    label: "Solidcommunity.net",
+    iri: "https://solidcommunity.net/",
+  },
+  {
+    logo: "solid-logo.svg",
+    label: "Solidweb.org",
+    iri: "https://solidweb.org/",
+  },
+];
+
+function setupOnProviderChange(setProviderIri) {
+  return (e, newValue) => {
+    console.log("New value: ", newValue);
+    if (typeof newValue === "string") {
+      if (newValue.startsWith("https://") || newValue.startsWith("http://")) {
+        setProviderIri(newValue);
+      } else if (newValue !== "") {
+        setProviderIri(`https://${newValue}`);
+      } else {
+        setProviderIri("");
+      }
+    } else {
+      setProviderIri(newValue?.iri || null);
+    }
+  };
+}
 
 function Form({
   providerIri,
@@ -29,6 +65,7 @@ function Form({
   setClientName,
   handleTokenGeneration,
 }) {
+  const onProviderChange = setupOnProviderChange(setProviderIri);
   return (
     <form>
       <label>
@@ -41,15 +78,24 @@ function Form({
             methods.
           </span>
         </div>
-        <TextField
-          key="providerIri"
-          margin="none"
-          variant="outlined"
-          value={providerIri}
-          style={{ width: 300 }}
-          onChange={(e) => {
-            setProviderIri(e.target.value);
+        <Autocomplete
+          options={providers}
+          onChange={onProviderChange}
+          onInputChange={onProviderChange}
+          getOptionLabel={(option) => option.label}
+          renderOption={(option) => {
+            return <>{option.label}</>;
           }}
+          inputValue={providerIri}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              margin="none"
+              variant="outlined"
+              type="url"
+              style={{ width: 300 }}
+            />
+          )}
         />
       </label>
       <br />
