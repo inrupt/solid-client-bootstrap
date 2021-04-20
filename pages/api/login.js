@@ -35,10 +35,7 @@ export default async function login(req, res) {
     oidcIssuer: issuer,
     clientName,
     handleRedirect: (redirectUrl) => {
-      console.log(`From login ${JSON.stringify(storage)}`);
       res.redirect(301, redirectUrl);
     },
   });
-  // FIXME: same issue as with the browser, the redirect is async
-  await new Promise((resolve) => setTimeout(resolve, 2000));
 }

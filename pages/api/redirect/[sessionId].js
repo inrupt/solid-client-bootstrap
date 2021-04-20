@@ -20,11 +20,10 @@
  */
 
 import { getSessionFromStorage } from "@inrupt/solid-client-authn-node";
-import { storage } from "../../../lib/storage";
+import { storage, clearStorage } from "../../../lib/storage";
 
 export default async function handleRedirect(req, res) {
   const { sessionId } = req.query;
-  console.log(`From redirect ${JSON.stringify(storage)}`);
   const session = await getSessionFromStorage(sessionId, storage);
   if (session === undefined) {
     res.status(400).send(`<p>No session stored for ID [${sessionId}]</p>`);
@@ -53,6 +52,7 @@ export default async function handleRedirect(req, res) {
     redirectUrl.searchParams.set("clientId", storedSession.clientId);
     redirectUrl.searchParams.set("clientSecret", storedSession.clientSecret);
     redirectUrl.searchParams.set("oidcIssuer", storedSession.issuer);
+    await clearStorage();
     if (session.info.isLoggedIn) {
       console.log(
         `Logged in as [<strong>${session.info.webId}</strong>] after redirect`
