@@ -6,12 +6,14 @@ The following changes have been implemented but not released yet:
 
 ## [Unreleased]
 
+The following sections document changes that have been released already:
+
+## 0.1.2 - 2021-04-20
+
 ### Bugfix
 
 - Upgrade dependencies to be compatible with the latest ID broker from ESS. This
   also fixes a TS change that was breaking the CLI tool.
-
-The following sections document changes that have been released already:
 
 ## 0.1.1 - 2021-03-12
 
