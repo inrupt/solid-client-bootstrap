@@ -25,17 +25,14 @@ import { Autocomplete } from "@material-ui/lab";
 
 const providers = [
   {
-    logo: "solid-logo.svg",
     label: "broker.pod.inrupt.com",
     iri: "https://broker.pod.inrupt.com",
   },
   {
-    logo: "solid-logo.svg",
     label: "Solidcommunity.net",
     iri: "https://solidcommunity.net/",
   },
   {
-    logo: "solid-logo.svg",
     label: "Solidweb.org",
     iri: "https://solidweb.org/",
   },
